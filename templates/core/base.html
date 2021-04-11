@@ -1,0 +1,101 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <title>{{ title }}</title>
+    </head>
+    <body>
+    <div class="container">
+           <header>
+               <h1>{{ heading }}</h1>
+           </header>
+            <!-- Page Layout here -->
+            <div class="row">
+                <div class="col s12 m7 l8">
+                    <form class="form-control" method="post">
+                        {% csrf_token %}
+                        <label for="task" class="label"></label>
+                        <div class="col s12 m1 l10">
+                            <input type="text" class="form-group m1"
+                                   name="title" placeholder="Enter today's task"
+                                   value="{{ value }}">
+                        </div>
+                        <button type="submit" class="btn btn-block">Add</button>
+                    </form>
+                        <div class="row">
+                            <div>
+                            {% if entries %}
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Created On</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for task in entries %}
+                                        <tr>
+                                            <td>{{ task.title | capfirst}}</td>
+                                            <td>{{ task.date_created | naturalday | capfirst }}, {{ task.date_created|date:'P' }}</td>
+                                            <td>
+{#                                                <input type="button" class="btn btn-small blue-grey" #}
+{#                                                         onclick="location='{% url "update" task.id %}';" value="Update">#}
+                                                <input type="button" class="btn btn-small red"
+                                                       onclick="location='{% url "completed" task.id %}';" value="Delete">
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                            {% else %}
+                                </div>
+                                </div>
+                                <h5>No Tasks, Enjoy your Day :)</h5>
+                            {% endif %}
+                    </div>
+                <div class="col s12 m5 l4" >
+                {% if completed_tasks %}
+                    <table class="">
+                        <thead>
+                            <tr>
+                                <th>Recently Completed</th>
+                                <th>Comleted On</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for task in completed_tasks %}
+                                <tr>
+                                <td><del>{{ task.title | truncatewords:4}}</del></td>
+                                <td>{{ task.date_completed | naturalday | capfirst}}, {{ task.date_completed | date:'P' }}</td>
+                                </tr>
+                            {% empty %}
+                                <td>Sorry, no entries.</td>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <input type="text" class="btn btn-small red" value="Clear all" onclick="location='{% url "clear" %}';">
+                    {% else %}
+                    <blockquote>Completed Tasks appear here.</blockquote>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+        <footer class="page-footer">
+          <div class="footer-copyright">
+            <div class="container">
+                <p class="center-align">Made by <a class="white-text" href="https://prashanjeet.com">Prashanjeet</a> | Checkout the source code <a
+                    href="#">Here</a></p>
+            </div>
+          </div>
+        </footer>
+    </body>
+</html>
