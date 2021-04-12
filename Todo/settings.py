@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '0hxk+7sj_bro9%c+pqm)s(pgfsghl%3d2skl&!lup#sz5+xc)3'
+SECRET_KEY = 'Your Secret Key'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -25,8 +25,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.humanize',
-
+    #Django humanize for template
+    'django.contrib.humanize',   # https://docs.djangoproject.com/en/3.1/ref/contrib/humanize/
+    # Django Allauth for google authentication
+    'django.contrib.sites',      # https://django-allauth.readthedocs.io/en/latest/installation.html
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    # Core App
     'core.apps.CoreConfig',  # registering core app
 ]
 
@@ -41,6 +48,32 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'Todo.urls'
+
+# Django Allauth Setting up
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SITE_ID = 1
+
+LOGIN_REDIRECT_URL = '/'
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+            ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
+# End Django Allauth Setting
 
 TEMPLATES = [
     {
