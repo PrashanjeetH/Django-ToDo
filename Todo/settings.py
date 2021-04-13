@@ -75,6 +75,9 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+
+ACCOUNT_EMAIL_VERIFICATION = "none"
+
 # End Django Allauth Setting
 
 TEMPLATES = [
