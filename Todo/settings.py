@@ -1,6 +1,6 @@
 from pathlib import Path
-import os
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+import os 
+Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'Your Secret Key'
+SECRET_KEY = '0hxk+7sj_bro9%c+pqm)s(pgfsghl%3d2skl&!lup#sz5+xc)3'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -144,3 +145,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_FILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+django_heroku.settings(locals())
