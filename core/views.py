@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def index(request):
-    print(request.user.username)
+    # print(request.user.username)
     completed = TodoList.objects.filter(user=request.user.id)
     context = {
         'title': 'Home',
