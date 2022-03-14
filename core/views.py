@@ -1,8 +1,10 @@
+from pkgutil import ImpImporter
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from .models import TodoList
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
+from django.utils.timezone import make_aware
 # Create your views here.
 
 
@@ -19,6 +21,7 @@ def index(request):
         entry = TodoList(user=request.user,
                          title=request.POST.get('title'),
                          date_created=datetime.now(),
+                        #  date_created=make_aware(datetime.now())  # To handle Naive date time warning
                          status=0)
         entry.save()
         tasks = TodoList.objects.filter(user=request.user.id)
