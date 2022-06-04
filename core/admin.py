@@ -5,5 +5,5 @@ from .models import TodoList
 
 @admin.register(TodoList)
 class TaskAdminClass(admin.ModelAdmin):
-    list_display = ['title', 'date_created', 'status']
+    list_display = ['id','title', 'date_created', 'status']
     list_per_page = 20

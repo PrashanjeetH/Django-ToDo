@@ -16,6 +16,7 @@ def index(request):
         'title': 'Home',
         'heading': "Your ToDo's ",
         'completed_tasks': completed.filter(status=1).order_by('-id')[:5],
+        'submit': 'Add',
     }
     if request.method == 'POST' and request.POST.get('title') != '':
         entry = TodoList(user=request.user,
@@ -24,8 +25,8 @@ def index(request):
                         #  date_created=make_aware(datetime.now())  # To handle Naive date time warning
                          status=0)
         entry.save()
-        tasks = TodoList.objects.filter(user=request.user.id)
-        context['entries'] = tasks.filter(status=0)
+        tasks = TodoList.objects.filter(user=request.user.id).order_by('-id')
+        context['entries'] = tasks.filter(status=0)[:10]
         return render(request, 'core/base.html', context)
     else:
         tasks = TodoList.objects.filter(user=request.user.id)
@@ -42,25 +43,31 @@ def mark_complete(request, pid):
         entry.save()
     return redirect('home')
 
+@login_required
+def update(request, pid):
+    if request.method == 'GET':
+        # Get 10 latest tasks to show
+        completed = TodoList.objects.filter(status=1).order_by('-id')[:10]
+        tasks = TodoList.objects.filter(status=0)
+        context = {
+            'title': 'Update',
+            'heading': 'Update your task',
+            'completed_tasks': completed,
+            'entries': tasks,
+            'submit': 'Update',
+        }
 
-# def update(request, pid):
-#     if request.method == 'GET':
-#         completed = TodoList.objects.filter(status=1).order_by('-id')[:10]
-#         tasks = TodoList.objects.filter(status=0)
-#         context = {
-#             'title': 'Home',
-#             'heading': 'Heading',
-#             'completed_tasks': completed,
-#             'entries': tasks,
-#         }
-#         entry = TodoList.objects.get(pk=pid)
-#         context['value'] = entry.title
-#         return render(request, 'core/base.html', context)
-#     else:
-#         return redirect('home')
+        entry = TodoList.objects.get(pk=pid)
+        context['value'] = entry.title
+        entry.delete()
+        return render(request, 'core/base.html', context)
+    elif request.method =='POST':
+        return index(request)
+    else:
+        return redirect('home')
 
 
 def clear_all(request):
-    entries = TodoList.objects.filter(user=request.user.id)
+    entries = TodoList.objects.filter(user=request.user.id).filter(status=1)
     entries.delete()
     return redirect('home')

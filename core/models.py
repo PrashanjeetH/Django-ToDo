@@ -8,7 +8,7 @@ class TodoList(models.Model):
     title = models.CharField(max_length=100)
     date_created = models.DateTimeField(auto_created=True)
     date_completed = models.DateTimeField(null=True, blank=True)
-    status = models.BooleanField(default=1)
+    status = models.BooleanField(default=1) # 1 for tasks not completed yet
 
     class Meta:
         verbose_name = 'Task'

@@ -47,7 +47,7 @@
                                    name="title" placeholder="Enter today's task"
                                    value="{{ value }}">
                         </div>
-                        <button type="submit" class="btn btn-block">Add</button>
+                        <button type="submit" class="btn btn-block">{{submit}}</button>
                     </form>
                         <div class="row">
                             <div>
@@ -66,8 +66,8 @@
                                             <td>{{ task.title | capfirst}}</td>
                                             <td>{{ task.date_created | naturalday | capfirst }}, {{ task.date_created|date:'P' }}</td>
                                             <td>
-{#                                                <input type="button" class="btn btn-small blue-grey" #}
-{#                                                         onclick="location='{% url "update" task.id %}';" value="Update">#}
+                                                <input type="button" class="btn btn-small blue-grey" 
+                                                         onclick="location='{% url "update" task.id %}';" value="Update">
                                                 <input type="button" class="btn btn-small red"
                                                        onclick="location='{% url "completed" task.id %}';" value="Delete">
                                             </td>
@@ -103,7 +103,7 @@
                             {% endfor %}
                         </tbody>
                     </table>
-                    <input type="text" class="btn btn-small red" value="Clear all" onclick="location='{% url "clear" %}';">
+                    <input type="text" class="btn btn-small red" value="Clear completed" onclick="location='{% url "clear" %}';">
                     {% else %}
                     <blockquote>Completed Tasks appear here.</blockquote>
                 {% endif %}
